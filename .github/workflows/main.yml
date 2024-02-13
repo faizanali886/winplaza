@@ -49,7 +49,6 @@ jobs:
           
       - name: Copy APK to VM
         run: |
-          ssh -i ~/.ssh/id_rsa.pem faizanali@172.206.236.90
-          scp README.md root@172.206.236.90:/var/www
+          ls
 
 
