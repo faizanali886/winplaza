@@ -42,12 +42,13 @@ jobs:
           name: apk
           path: build/app/outputs/flutter-apk/*.apk
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Transfer APK to Azure VM
+        uses: appleboy/scp-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
-      - name: Copy APK to VM
-        run: |
-          scp build/app/outputs/flutter-apk/*.apk root@fluttercicd:/var/www/
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "build/app/outputs/flutter-apk/*.apk"
+          target: "/var/www"
 
