@@ -14,33 +14,33 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install and set up Java
-        run: |
-          curl -s "https://get.sdkman.io" | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk install java 17.0.10-zulu
-          sdk default java 17.0.10-zulu
+      # - name: Install and set up Java
+      #   run: |
+      #     curl -s "https://get.sdkman.io" | bash
+      #     source "$HOME/.sdkman/bin/sdkman-init.sh"
+      #     sdk install java 17.0.10-zulu
+      #     sdk default java 17.0.10-zulu
 
-      - name: Install Flutter
-        run: |
-          wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.7.12-stable.tar.xz
-          tar xf flutter_linux_3.7.12-stable.tar.xz -C $HOME
-          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+      # - name: Install Flutter
+      #   run: |
+      #     wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.7.12-stable.tar.xz
+      #     tar xf flutter_linux_3.7.12-stable.tar.xz -C $HOME
+      #     echo "$HOME/flutter/bin" >> $GITHUB_PATH
 
-      - name: Check Flutter Version and Doctor Output
-        run: |
-          flutter --version
-          flutter doctor
-          flutter pub get
+      # - name: Check Flutter Version and Doctor Output
+      #   run: |
+      #     flutter --version
+      #     flutter doctor
+      #     flutter pub get
 
-      - name: Build APK
-        run: flutter build apk
+      # - name: Build APK
+      #   run: flutter build apk
 
-      - name: Archive APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: apk
-          path: build/app/outputs/flutter-apk/*.apk
+      # - name: Archive APK
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: apk
+      #     path: build/app/outputs/flutter-apk/*.apk
 
       - name: Transfer APK to Azure VM
         uses: appleboy/scp-action@master
