@@ -47,10 +47,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy APK to VM
+      - name: Copy APK to VM and Move to /var/www
         run: |
-          scp -o StrictHostKeyChecking=no ./build/app/outputs/flutter-apk/app-release.apk azureuser@172.191.161.66:/var/www
+          scp -o StrictHostKeyChecking=no ./build/app/outputs/flutter-apk/app-release.apk azureuser@172.191.161.66:/tmp
+          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "sudo mv /tmp/app-release.apk /var/www"
 
-      - name: Connect to VM and Execute Commands
-        run: |
-          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "echo 'APK uploaded successfully'"
