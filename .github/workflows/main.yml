@@ -1,0 +1,43 @@
+name: Flutter Build Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install and set up Java
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install java 17.0.10-zulu
+          sdk default java 17.0.10-zulu
+
+      - name: Install Flutter
+        run: |
+          wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.7.12-stable.tar.xz
+          tar xf flutter_linux_3.7.12-stable.tar.xz -C $HOME
+          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+
+      - name: Check Flutter Version and Doctor Output
+        run: |
+          flutter --version
+          flutter doctor
+          flutter pub get
+
+      - name: Build APK
+        run: flutter build apk
+
+      - name: Archive APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/*.apk
