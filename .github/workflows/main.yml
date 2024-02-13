@@ -49,6 +49,6 @@ jobs:
           
       - name: Connect to VM and Execute Commands
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@172.206.236.90 "echo 'SSH connection successful'"
+          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "echo 'SSH connection successful'"
 
 
