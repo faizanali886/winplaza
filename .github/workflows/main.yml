@@ -47,8 +47,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy APK to VM and Move to /var/www
+      - name: Update APK on VM
         run: |
-          scp -o StrictHostKeyChecking=no ./build/app/outputs/flutter-apk/app-release.apk azureuser@172.191.161.66:/tmp
-          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "sudo mv /tmp/app-release.apk /var/www"
+          # Copy the APK to a temporary location on the VM
+          scp -o StrictHostKeyChecking=no ./build/app/outputs/flutter-apk/app-release.apk azureuser@172.191.161.66:/tmp/app-release.apk
+          # SSH into the VM, delete any existing APK in /var/www, and move the new APK to /var/www
+          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "sudo rm -f /var/www/app-release.apk && sudo mv /tmp/app-release.apk /var/www/"
+
 
