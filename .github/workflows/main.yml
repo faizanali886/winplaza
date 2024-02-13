@@ -47,8 +47,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
-      - name: Copy APK to VM
+      - name: Connect to VM and Execute Commands
         run: |
-          ls
+          ssh -o StrictHostKeyChecking=no faizanali@172.206.236.90 "echo 'SSH connection successful'"
 
 
