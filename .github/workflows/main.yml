@@ -20,12 +20,22 @@ jobs:
           unzip flutter_macos_3.7.12-stable.zip -d $HOME
           echo "$HOME/flutter/bin" >> $GITHUB_PATH
 
+      - name: Set up CocoaPods
+        run: |
+          sudo gem install cocoapods
+          pod setup
+
       - name: Check Flutter Version and Doctor Output
         run: |
           flutter --version
           flutter doctor
           flutter pub get
 
+      - name: Install Pods
+        run: |
+          cd ios
+          pod install
+          
       - name: Build iOS
         run: |
           flutter build ios --release --no-codesign
