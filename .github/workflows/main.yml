@@ -46,5 +46,19 @@ jobs:
           name: ios-ipa
           path: build/ios/ipa/*.ipa
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Copy iOS App to VM
+        run: |
+          ls ./build/ios/iphoneos
+          scp -o StrictHostKeyChecking=no ./build/ios/ipa/*.ipa azureuser@172.191.161.66:/var/www
+
+      - name: Connect to VM and Execute Commands
+        run: |
+          ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "echo 'iOS app uploaded successfully'"
+
       # The steps for setting up SSH and copying the app to a VM are removed
       # since typically IPA files are not deployed directly to a web server.
