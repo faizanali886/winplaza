@@ -55,7 +55,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "sudo rm -f /var/www/app-release.apk && sudo mv /tmp/app-release.apk /var/www/"
 
   build-ios:
-    needs: build-android # Optional: make iOS build start after Android build completes
+  #  needs: build-android # Optional: make iOS build start after Android build completes
     runs-on: macOS-latest
     steps:
       - name: Checkout Repository
@@ -100,8 +100,7 @@ jobs:
           
       - name: Copy iOS App to VM
         run: |
-          ls ./build/ios/iphoneos
-          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.app azureuser@172.191.161.66:/var/www
+          scp -o StrictHostKeyChecking=no -r ./build/ios/iphoneos/Runner.app azureuser@172.191.161.66:/var/www
 
       - name: Connect to VM and Execute Commands
         run: |
