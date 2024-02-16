@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   build-ios:
     runs-on: macOS-latest
@@ -43,10 +44,10 @@ jobs:
         env:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # If you're using match for signing
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Only if you're using match for signing
         run: |
           cd ios
-          fastlane build_and_export_ipa
+          fastlane ios build_and_export_ipa # Modified this line to include 'ios' before the lane name
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
@@ -55,10 +56,8 @@ jobs:
           
       - name: Copy iOS App to VM
         run: |
-          ls ./build/ios/iphoneos
-          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.app azureuser@172.191.161.66:/var/www
+          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.ipa azureuser@172.191.161.66:/var/www # Modified to use '*.ipa' instead of '*.app'
 
       - name: Connect to VM and Execute Commands
         run: |
           ssh -o StrictHostKeyChecking=no azureuser@172.191.161.66 "echo 'iOS app uploaded successfully'"
-    
