@@ -37,7 +37,7 @@ jobs:
       - name: Install Pods
         run: |
           cd ios
-          pod install
+          pod install pod --repo-update
 
       - name: Install Fastlane
         run: |
