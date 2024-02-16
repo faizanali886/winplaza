@@ -1,7 +1,13 @@
 platform :ios do
-    lane :build_and_export_ipa do
-      match(type: "appstore") # or "adhoc" for ad-hoc distribution
-      gym(scheme: "Runner", export_options: { method: "app-store" })
-    end
+  lane :build_and_export_ipa do
+    # Build and sign the app using gym
+    gym(scheme: "Runner",  # Make sure to use your actual scheme
+        export_options: {
+          method: "app-store", # Or "ad-hoc", "enterprise", "development" as per your need
+          provisioningProfiles: { 
+            # Ensure this matches your app's bundle identifier and the name of the provisioning profile to use
+            "com.example.app" => "Provisioning Profile Name"
+          }
+        })
   end
-  
+end
