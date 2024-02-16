@@ -42,7 +42,20 @@ jobs:
       - name: Install Pods
         run: |
           cd ios
-          pod install pod --repo-update
+          /usr/local/lib/ruby/gems/3.0.0/bin/pod install
+          
+      - name: Add CocoaPods to PATH
+        run: echo "/usr/local/lib/ruby/gems/3.0.0/bin" >> $GITHUB_PATH
+      
+      - name: Install Pods
+        run: |
+          cd ios
+          pod install
+
+      - name: Print Environment Info
+        run: |
+          echo "PATH=$PATH"
+          which pod
 
       - name: Install Fastlane
         run: |
