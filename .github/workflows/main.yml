@@ -39,15 +39,14 @@ jobs:
       - name: Install Fastlane
         run: |
           brew install fastlane
-
+      
       - name: Fastlane Build and Sign
         env:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          # MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Only if you're using match for signing
         run: |
           cd ios
-          fastlane ios build_and_export_ipa # Modified this line to include 'ios' before the lane name
+          fastlane ios build_and_export_ipa
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
