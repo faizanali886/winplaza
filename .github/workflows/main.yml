@@ -33,7 +33,12 @@ jobs:
           flutter --version
           flutter doctor
           flutter pub get
-
+      
+      - name: Check CocoaPods Installation
+        run: |
+          pod --version
+          which pod
+          
       - name: Install Pods
         run: |
           cd ios
