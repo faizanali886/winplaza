@@ -58,7 +58,7 @@ jobs:
           
       - name: Copy iOS App to VM
         run: |
-          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.ipa azureuser@172.191.161.66:/var/www # Modified to use '*.ipa' instead of '*.app'
+          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.ipa azureuser@172.191.161.66:/var/www
 
       - name: Connect to VM and Execute Commands
         run: |
