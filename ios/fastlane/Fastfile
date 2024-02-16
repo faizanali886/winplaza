@@ -1,0 +1,7 @@
+platform :ios do
+    lane :build_and_export_ipa do
+      match(type: "appstore") # or "adhoc" for ad-hoc distribution
+      gym(scheme: "Runner", export_options: { method: "app-store" })
+    end
+  end
+  
