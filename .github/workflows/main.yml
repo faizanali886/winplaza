@@ -1,4 +1,4 @@
-name: Flutter Build for Android and iOS
+name: Flutter Build Workflow for iOS
 
 on:
   push:
@@ -20,9 +20,6 @@ jobs:
           unzip flutter_macos_3.7.12-stable.zip -d $HOME
           echo "$HOME/flutter/bin" >> $GITHUB_PATH
 
-      - name: Select Xcode Version
-        run: sudo xcode-select -s /Applications/Xcode_13.4.app
-
       - name: Set up CocoaPods
         run: |
           sudo gem install cocoapods
@@ -33,41 +30,21 @@ jobs:
           flutter --version
           flutter doctor
           flutter pub get
-      
-      - name: Check CocoaPods Installation
-        run: |
-          pod --version
-          which pod
-          
-      - name: Install Pods
-        run: |
-          cd ios
-          /usr/local/lib/ruby/gems/3.0.0/bin/pod install
-          
-      - name: Add CocoaPods to PATH
-        run: echo "/usr/local/lib/ruby/gems/3.0.0/bin" >> $GITHUB_PATH
-      
+
       - name: Install Pods
         run: |
           cd ios
           pod install
+          
+      - name: Build iOS
+        run: |
+          flutter build ios --release --no-codesign
 
-      - name: Print Environment Info
-        run: |
-          echo "PATH=$PATH"
-          which pod
-
-      - name: Install Fastlane
-        run: |
-          brew install fastlane
-      
-      - name: Fastlane Build and Sign
-        env:
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
-          FASTLANE_USER: ${{ secrets.APPLE_ID }}
-        run: |
-          cd ios
-          fastlane ios build_and_export_ipa
+      - name: Archive Built iOS App
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-app
+          path: build/ios/iphoneos/*.app
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
@@ -76,7 +53,8 @@ jobs:
           
       - name: Copy iOS App to VM
         run: |
-          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.ipa azureuser@172.191.161.66:/var/www
+          ls ./build/ios/iphoneos
+          scp -o StrictHostKeyChecking=no ./build/ios/iphoneos/*.app azureuser@172.191.161.66:/var/www
 
       - name: Connect to VM and Execute Commands
         run: |
